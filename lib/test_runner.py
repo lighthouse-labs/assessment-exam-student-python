@@ -1,31 +1,20 @@
 import pytest
-from pytest_jsonreport.plugin import JSONReport
-
 from lib.api import API, SubmissionError
-
+from subprocess import Popen, PIPE
 import datetime as dt
 import json
 import hashlib
 from math import floor
 import os 
 import sys
-
-class HiddenPrints:
-
-    def __enter__(self):
-        self._original_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        sys.stdout.close()
-        sys.stdout = self._original_stdout
+import time
 
 
 class TestRunner:
 
     def __init__(self, question_number):
         self.start_time = dt.datetime.now()
-        self.question_number = question_number
+        self.question_number = int(question_number)
 
     
     def pad_number(self, number):
@@ -40,6 +29,9 @@ class TestRunner:
 
     
     def load_exam_data(self):
+        while not os.path.exists('./.exam-data'):
+            time.sleep(1)
+            
         with open('./.exam-data', 'r') as f:
             self.exam_data = json.loads(f.read())
 
@@ -79,12 +71,19 @@ class TestRunner:
 
     
     def get_test_results(self):
+        summary = self.json_report['summary']
+        total = summary['total'] if summary.get('total') else 0
+        failed = summary['failed'] if summary.get('failed') else 0
+        collected = summary['collected'] if summary.get('collected') else 0
+        passes = total - failed
+        pending = total - collected
+
         dct = {
             'suites': 1,
-            'tests': self.json_report['summary']['total'],
-            'passes': self.json_report['summary']['total'] - self.json_report['summary']['failed'],
-            'pending': self.json_report['summary']['total'] - self.json_report['summary']['collected'],
-            'failures': self.json_report['summary']['failed'],
+            'tests': total,
+            'passes': passes,
+            'pending': pending,
+            'failures': failed,
             'start': str(self.start_time),
             'end': str(self.end_time),
             'duration' : self.json_report['duration']
@@ -111,26 +110,38 @@ class TestRunner:
 
         else:
             print('Time Remaining: None (Submission still accepted)')
+    
+
+    def get_json_report(self):
+        while not os.path.exists('.report.json'):
+            time.sleep(1)
+
+        with open('.report.json', 'r') as f:
+            return json.loads(f.read())
+    
+    
+    def cleanup(self):
+        os.remove('.report.json')
 
 
     def run(self):
         self.load_exam_data()
 
-        plugin = JSONReport()
-        with HiddenPrints():
-            pytest.main([self.get_test_file_path()], plugins=[plugin])
-
-        self.json_report = plugin.report
+        process = Popen(['pytest', self.get_test_file_path(), '--json-report'], stdout=PIPE, stderr=PIPE)
+        self.stdout, self.stderr = process.communicate()
+        self.json_report = self.get_json_report()
         self.end_time = dt.datetime.now()
+        self.request_body = self.get_request_body()
 
         try:
-            self.request_body = self.get_request_body()
-            res =  API().submit_results(request_body = self.request_body,
+            self.res = API().submit_results(request_body = self.request_body,
                                         exam_id = self.exam_data['exam_id'], 
                                         exam_token = self.exam_data['token'])
         
-            self.print_results(results=res)
+            self.print_results(results=self.res)
         
         except SubmissionError as e:
             print(e)
+
+        self.cleanup()
 

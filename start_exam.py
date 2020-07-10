@@ -12,7 +12,7 @@ if not args['exam_token']:
     print("Please provide an exam token like the following:")
     print("python start_exam.py -t [<EXAM_TOKEN>]")
 
-if len(glob.glob('./tests/*')) != 0 or len(glob.glob('./answers/*')) != 0:
+if len(glob.glob('./tests/test*')) != 0 or len(glob.glob('./answers/question*')) != 0:
     print("Please make sure that the **answers** and **tests** directories are empty before trying to start an exam!")
 
 else:
