@@ -14,7 +14,6 @@ class ExamLoader:
             print('Please make sure you enter it along with this command')
             print('python start_examp.py -t [<EXAM_TOKEN>]')
             print(f"Server Error: #{e}")
-            return False
         except StartExamForbiddenError as e:
             print('Invalid token!')
             print('Please make sure you have started the exam from compass.')
