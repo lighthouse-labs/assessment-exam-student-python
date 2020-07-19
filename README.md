@@ -10,6 +10,8 @@ Due to the inclusion of embedded screenshots, we suggest you read this file in H
 
 Please carefully follow the instructions below to get started.
 
+**Important Note:** Make sure you are running Python version **3.6** or more to solve the questions.
+
 **Important Note:** If you make a mistake in performing these steps (and see unexpected behavior), you will need to RESTART from step 1 (clone the repo)!
 
 ---
