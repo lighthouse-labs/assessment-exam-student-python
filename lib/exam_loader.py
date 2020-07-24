@@ -35,13 +35,13 @@ class ExamLoader:
             
             print(f'\tCreating Question {q["questionId"]}\t({q["maxScore"]} Points)\tAnswer file {code_path}')
 
-            with open(code_path, 'w') as f:
+            with open(code_path, 'w', encoding="utf-8") as f:
                 f.write(code_content)
 
-            with open(test_path, 'w') as f:
+            with open(test_path, 'w', encoding="utf-8") as f:
                 f.write(test_content)
 
         exam_data = {'exam_id': exam['examId'], 'token': token}
 
-        with open('./.exam-data', 'w') as f:
+        with open('./.exam-data', 'w', encoding="utf-8") as f:
             f.write(json.dumps(exam_data))

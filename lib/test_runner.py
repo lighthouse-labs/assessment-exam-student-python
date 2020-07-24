@@ -32,17 +32,17 @@ class TestRunner:
         while not os.path.exists('./.exam-data'):
             time.sleep(1)
             
-        with open('./.exam-data', 'r') as f:
+        with open('./.exam-data', 'r', encoding="utf-8") as f:
             self.exam_data = json.loads(f.read())
 
 
     def get_student_code(self):
-        with open(f"answers/question_{self.pad_number(self.question_number)}.py", 'r') as f:
+        with open(f"answers/question_{self.pad_number(self.question_number)}.py", 'r', encoding="utf-8") as f:
             return f.read() 
     
 
     def get_test_file_hash(self):
-        with open(self.get_test_file_path(), 'r') as f:
+        with open(self.get_test_file_path(), 'r', encoding="utf-8") as f:
             test_file_content = f.read()
         
         return hashlib.md5(test_file_content.encode()).hexdigest()
@@ -116,7 +116,7 @@ class TestRunner:
         while not os.path.exists('.report.json'):
             time.sleep(1)
 
-        with open('.report.json', 'r') as f:
+        with open('.report.json', 'r', encoding="utf-8") as f:
             return json.loads(f.read())
     
     
