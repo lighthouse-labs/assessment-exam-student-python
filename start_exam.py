@@ -16,7 +16,12 @@ if len(glob.glob('./tests/test*')) != 0 or len(glob.glob('./answers/question*'))
     print("Please make sure that the **answers** and **tests** directories are empty before trying to start an exam!")
 
 else:
-    ExamLoader().load(token = args['exam_token'])
+    try:
+        ExamLoader().load(token = args['exam_token'])
+    # general exception  
+    except Exception as e:
+        print(e)
+
 
 
 

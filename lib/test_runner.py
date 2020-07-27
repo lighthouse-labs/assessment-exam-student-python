@@ -98,7 +98,7 @@ class TestRunner:
 
         questions = results['scores']
         for q in questions:
-            print(f'Q{q["questionNumber"]}. {int(q["score"])/ int(q["maxScore"])}')
+            print(f'Q{q["questionNumber"]}. {int(q["score"])}/{int(q["maxScore"])}')
 
 
         time_remaining = float(results['remainingTime'])
@@ -118,16 +118,25 @@ class TestRunner:
 
         with open('.report.json', 'r', encoding="utf-8") as f:
             return json.loads(f.read())
+
     
+    def print_pytest_traceback(self):
+        print(self.stdout.decode('utf-8'))
+
     
     def cleanup(self):
-        os.remove('.report.json')
+        if os.path.exists('.report.json'):
+            os.remove('.report.json')
 
 
     def run(self):
         self.load_exam_data()
 
-        process = Popen(['pytest', self.get_test_file_path(), '--json-report'], stdout=PIPE, stderr=PIPE)
+        process = Popen(['pytest', 
+                         self.get_test_file_path(), 
+                         '--json-report',
+                         '--tb=short',
+                         '--color=yes'], stdout=PIPE, stderr=PIPE)
         self.stdout, self.stderr = process.communicate()
         self.json_report = self.get_json_report()
         self.end_time = dt.datetime.now()
@@ -137,7 +146,8 @@ class TestRunner:
             self.res = API().submit_results(request_body = self.request_body,
                                         exam_id = self.exam_data['exam_id'], 
                                         exam_token = self.exam_data['token'])
-        
+
+            self.print_pytest_traceback()
             self.print_results(results=self.res)
         
         except SubmissionError as e:

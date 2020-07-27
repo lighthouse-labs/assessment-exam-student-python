@@ -13,4 +13,8 @@ if not args['question']:
     print("python test_question.py -q [<QUESTION_NUMBER>]")
 
 else:
-    TestRunner(question_number = args['question']).run()
+    try:
+        TestRunner(question_number = args['question']).run()
+    # general exception    
+    except Exception as e:
+        print(e)
