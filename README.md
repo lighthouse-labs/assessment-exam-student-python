@@ -14,6 +14,9 @@ Please carefully follow the instructions below to get started.
 
 **Important Note:** If you make a mistake in performing these steps (and see unexpected behavior), you will need to RESTART from step 1 (clone the repo)!
 
+> #### Warning
+> Do **NOT** use VSCode Terminal to follow the steps below. Use default Terminal on Linux and MacOS and Anaconda Prompt or classic Command Prompt on Windows
+
 ---
 
 > 1. Clone the repository
