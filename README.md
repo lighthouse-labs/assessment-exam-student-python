@@ -21,7 +21,7 @@ Please carefully follow the instructions below to get started.
 
 > 1. Clone the repository
 
-To start, **CLONE** (do not _fork_) this repo to your local Vagrant machine, and `cd` into the folder:
+To start, **CLONE** (do *not* fork) this repo to your local machine, and `cd` into the repo directory:
 
 ```terminal
 git clone https://github.com/lighthouse-labs/assessment-exam-student-python.git
@@ -46,17 +46,15 @@ Open the entire project directory in VS Code. You should see the directory tree 
 
 ---
 
-> 4. Start the test from a terminal window
+> 4. Start the test from the terminal window (the one you used to clone the repo)
 
-Enter the command below to start the test:
+Enter the command below to start the test (Replace `EXAM_TOKEN` with the token provided to you on Compass.):
 
 - Once you start the exam, the test timer will start.
 
 ```terminal
-python start_exam.py -t <EXAM_TOKEN>
+python start_exam.py -t EXAM_TOKEN
 ```
-
-> Replace `<EXAM_TOKEN>` with the token provided to you on Compass.
 
 This command downloads the test questions to your local file system. You should see new files in the `answers/` directory.
 
@@ -81,7 +79,7 @@ If you see an error, please let the proctor know. **You may need to re-clone and
 
 Now you're ready to start answering questions! Follow these steps carefully:
 
-> 1. Expand the `answers/` directory in your code editor.
+> 1. Enter the `answers/` directory in your code editor.
 
 Note that the question numbering starts at `0`.
 
@@ -92,7 +90,7 @@ Note that the question numbering starts at `0`.
 From the command line, execute the automated tests for the first question, question 0, using the command below (question numbering starts at 0):
 
 ```terminal
-python test_question.py -q [<QUESTION_NUMBER>]
+python test_question.py -q QUESTION_NUMBER
 ```
 
 ---
@@ -111,7 +109,7 @@ Run the `python test_question.py -q 0` command again to make sure you are starti
 
 Notice that your score for the question also went up. The number of automated tests passing the primary factor for how your score is calculated.
 
-It is recommended that you run the `python test_question.py -q [<QUESTION_NUMBER>]` command frequently.
+It is recommended that you run the `python test_question.py -q QUESTION_NUMBER` command frequently.
 
 ---
 
